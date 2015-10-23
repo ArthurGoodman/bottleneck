@@ -62,8 +62,8 @@ namespace bottleneck {
         protected override void OnMouseMove(MouseEventArgs e) {
             switch (e.Button) {
                 case MouseButtons.Left:
-                    offset.X += e.X - lastPos.X;
-                    offset.Y += e.Y - lastPos.Y;
+                    offset.X += (e.X - lastPos.X) / scale;
+                    offset.Y += (e.Y - lastPos.Y) / scale;
 
                     lastPos.X = e.X;
                     lastPos.Y = e.Y;
@@ -81,8 +81,10 @@ namespace bottleneck {
 
             g.InterpolationMode = InterpolationMode.NearestNeighbor;
 
-            g.TranslateTransform(ClientSize.Width / 2 + offset.X, ClientSize.Height / 2 + offset.Y);
+            g.TranslateTransform(ClientSize.Width / 2, ClientSize.Height / 2);
+
             g.ScaleTransform(scale, scale);
+            g.TranslateTransform(offset.X, offset.Y);
 
             g.DrawImage(input, -input.Width - 10, -input.Height / 2);
             g.DrawImage(output, 10, -output.Height / 2);
